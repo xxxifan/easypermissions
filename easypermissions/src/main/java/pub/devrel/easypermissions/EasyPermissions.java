@@ -123,16 +123,16 @@ public class EasyPermissions {
      * @param requestCode requestCode argument to permission result callback.
      * @param permissions permissions argument to permission result callback.
      * @param grantResults grantResults argument to permission result callback.
-     * @param object the calling Activity or Fragment.
+     * @param callbacks the calling Activity or Fragment.
      *
      * @throws IllegalArgumentException if the calling Activity does not implement
      *         {@link PermissionCallbacks}.
      */
     public static void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                                  int[] grantResults, Object object) {
-
-        checkCallingObjectSuitability(object);
-        PermissionCallbacks callbacks = (PermissionCallbacks) object;
+                                                  int[] grantResults, PermissionCallbacks callbacks) {
+        if (callbacks != null) {
+            checkCallingObjectSuitability(callbacks);
+        }
 
         // Make a collection of granted and denied permissions from the request.
         ArrayList<String> granted = new ArrayList<>();
@@ -146,20 +146,23 @@ public class EasyPermissions {
             }
         }
 
-        // Report granted permissions, if any.
-        if (!granted.isEmpty()) {
-            // Notify callbacks
-            callbacks.onPermissionsGranted(granted);
-        }
+        if (callbacks != null) {
 
-        // Report denied permissions, if any.
-        if (!denied.isEmpty()) {
-            callbacks.onPermissionsDenied(denied);
+            // Report granted permissions, if any.
+            if (!granted.isEmpty()) {
+                // Notify callbacks
+                callbacks.onPermissionsGranted(granted);
+            }
+
+            // Report denied permissions, if any.
+            if (!denied.isEmpty()) {
+                callbacks.onPermissionsDenied(denied);
+            }
         }
 
         // If 100% successful, call annotated methods
         if (!granted.isEmpty() && denied.isEmpty()) {
-            runAnnotatedMethods(object, requestCode);
+            runAnnotatedMethods(callbacks, requestCode);
         }
     }
 
