@@ -71,8 +71,6 @@ public class EasyPermissions {
      *
      * @param object Activity or Fragment requesting permissions. Should implement
      *                {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback}
-     *                or
-     *                {@link android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
      * @param rationale a message explaining why the application needs this set of permissions, will
      *                  be displayed if the user rejects the request the first time.
      * @param requestCode request code to track this request, must be < 256.
